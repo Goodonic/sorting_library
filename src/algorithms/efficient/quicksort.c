@@ -1,4 +1,4 @@
-#include "efficient_sorts.h"
+#include "../../../include/efficient_sorts.h"
 
 int n, a[n];
 void quick_sort(int *s_arr, const int first, const int last)

@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "efficient_sorts.h"
+#include "../../../include/efficient_sorts.h"
 
 static void merge(int a[], const int left, const int mid, const int right)
 {
