@@ -12,12 +12,12 @@ int GetMinrun(int n) {
   return r + n;
 }
 
-static void insertion_sort(int a[], const int lo, const int hi)
+static void insertion_sort(int a[], const int first, const int last)
 {
-  for (int i = lo + 1; i <= hi; ++i) {
+  for (int i = first + 1; i <= last; ++i) {
     const int key = a[i];
     int j = i - 1;
-    while (j >= lo && a[j] > key) {
+    while (j >= first && a[j] > key) {
       a[j + 1] = a[j];
       --j;
     }
@@ -61,7 +61,7 @@ void timsort(int a[], const int n)
             while (i + run_len < n && a[i + run_len - 1] > a[i + run_len])
                 ++run_len;
             for (int l = i, r = i + run_len - 1; l < r; ++l, --r) {
-                int t = a[l]; a[l] = a[r]; a[r] = t;
+                const int t = a[l]; a[l] = a[r]; a[r] = t;
             }
         } else {
             while (i + run_len < n && a[i + run_len - 1] <= a[i + run_len])
@@ -83,11 +83,11 @@ void timsort(int a[], const int n)
         while (sz > 2 &&
                stack[sz - 3].len <= stack[sz - 2].len + stack[sz - 1].len) {
 
-            int lo   = stack[sz - 3].start;
-            int mid  = lo + stack[sz - 3].len - 1;
-            int hi   = lo + stack[sz - 3].len + stack[sz - 2].len - 1;
+            const int left   = stack[sz - 3].start;
+            const int mid  = left + stack[sz - 3].len - 1;
+            const int right   = left + stack[sz - 3].len + stack[sz - 2].len - 1;
 
-            merge(a, lo, mid, hi);
+            merge(a, left, mid, right);
 
             stack[sz - 3].len += stack[sz - 2].len;
             stack[sz - 2] = stack[sz - 1];

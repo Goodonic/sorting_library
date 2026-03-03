@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = "Permutations Library"
+PROJECT_NAME           = "Sorting Library"
 PROJECT_NUMBER         = 0.0.1
 PROJECT_BRIEF          = "Comprehensive C99 library for permutation algorithms"
 PROJECT_LOGO           = docs/images/logo.png

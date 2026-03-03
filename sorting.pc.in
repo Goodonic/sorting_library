@@ -1,0 +1,12 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+
+Name: SortingLibrary
+Description: Comprehensive sorting algorithms library in C
+Version: @PROJECT_VERSION@
+Requires:
+Libs: -L${libdir} -lsorting
+Libs.private: -lpthread -lm
+Cflags: -I${includedir}

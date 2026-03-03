@@ -1,6 +1,11 @@
 #include "../../../include/efficient_sorts.h"
-
-int n, a[n];
+/**
+ * @brief Сортирует массив s_arr[first .. last] (включительно)
+ *
+ * @param s_arr указатель на массив
+ * @param first индекс первого элемента (обычно 0)
+ * @param last  индекс последнего элемента (n‑1)
+ */
 void quick_sort(int *s_arr, const int first, const int last)
 {
   if (first < last)
