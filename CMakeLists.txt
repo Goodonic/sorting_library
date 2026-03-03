@@ -48,12 +48,13 @@ set(LIBRARY_SOURCES
 #        src/core/comparator.c
 #        src/core/memory_manager.c
 
-#        # Simple sorts (Student 1)
-#        src/algorithms/simple/insertion.c
-#        src/algorithms/simple/selection.c
-#        src/algorithms/simple/bubble.c
-#        src/algorithms/simple/gnome_stooge.c
-#        src/algorithms/simple/shell.c
+        # Simple sorts (Student 1)
+        src/algorithms/simple/insertion.c
+        src/algorithms/simple/selection.c
+        src/algorithms/simple/bubble.c
+        src/algorithms/simple/gnome_stooge.c
+        src/algorithms/simple/shell.c
+        src/algorithms/simple/utils.c
 
         # Efficient sorts (Student 2)
         src/algorithms/efficient/quicksort.c

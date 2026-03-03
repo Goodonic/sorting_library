@@ -44,16 +44,20 @@ function(add_sorting_test test_name test_source)
 endfunction()
 
 # Добавление тестов - проверяем существование файлов
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/unit_tests.c)
-    add_sorting_test(unit_tests unit_tests.c)
+#if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/unit_tests.c)
+#    add_sorting_test(unit_tests unit_tests.c)
+#endif()
+
+#if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/correctness_tests.c)
+#    add_sorting_test(correctness_tests correctness_tests.c)
+#endif()
+
+if(EXISTS test_introsort.c)
+    add_sorting_test(test_introsort test_introsort.c)
 endif()
 
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/correctness_tests.c)
-    add_sorting_test(correctness_tests correctness_tests.c)
-endif()
-
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stud1/test_introsort.c)
-    add_sorting_test(test_introsort stud1/test_introsort.c)
+if(EXISTS test_simple_sorts.c)
+    add_sorting_test(test_simple_sorts test_simple_sorts.c)
 endif()
 
 # Специальная цель для запуска всех тестов

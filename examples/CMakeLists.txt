@@ -46,3 +46,29 @@ else()
         add_sorting_example(${example_name} ${example_file})
     endforeach()
 endif()
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/simple_sorts.c)
+    add_sorting_example(simple_sorts simple_sorts.c)
+else()
+    message(WARNING "simple_sorts.c not found, looking for alternative example files...")
+
+    # Ищем другие возможные файлы примеров
+    file(GLOB EXAMPLE_FILES "*.c")
+    foreach(example_file ${EXAMPLE_FILES})
+        get_filename_component(example_name ${example_file} NAME_WE)
+        add_sorting_example(${example_name} ${example_file})
+    endforeach()
+endif()
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stud3.c)
+    add_sorting_example(stud3 stud3.c)
+else()
+    message(WARNING "stud3.c not found, looking for alternative example files...")
+
+    # Ищем другие возможные файлы примеров
+    file(GLOB EXAMPLE_FILES "*.c")
+    foreach(example_file ${EXAMPLE_FILES})
+        get_filename_component(example_name ${example_file} NAME_WE)
+        add_sorting_example(${example_name} ${example_file})
+    endforeach()
+endif()
