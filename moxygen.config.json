@@ -1,0 +1,31 @@
+{
+  "groups": {
+    "algorithms": {
+      "title": "Algorithms",
+      "output": "docs/ALGORITHMS.md",
+      "filter": "group:algorithms"
+    },
+    "api": {
+      "title": "API Reference",
+      "output": "docs/API.md",
+      "filter": "kind:function|kind:struct|kind:typedef|kind:enum"
+    },
+    "build": {
+      "title": "Build Instructions",
+      "output": "docs/BUILD.md",
+      "filter": "compound:build"
+    },
+    "examples": {
+      "title": "Examples",
+      "output": "docs/EXAMPLES.md",
+      "filter": "compound:examples|group:examples"
+    }
+  },
+  "general": {
+    "language": "ru",
+    "linkSuffix": ".md",
+    "anchors": true,
+    "toc": true,
+    "tocLevel": 3
+  }
+}

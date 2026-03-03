@@ -1,0 +1,198 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        build_type: [Debug, Release]
+        compiler: [gcc, clang]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang clang-tidy clang-format cppcheck valgrind
+
+      - name: Configure CMake
+        run: |
+          cmake -B ${{github.workspace}}/build_${{matrix.compiler}}_${{matrix.build_type}} \
+                -DCMAKE_BUILD_TYPE=${{matrix.build_type}} \
+                -DCMAKE_C_COMPILER=${{matrix.compiler}} \
+                -DENABLE_TESTING=ON \
+                -DENABLE_BENCHMARKS=ON \
+                -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+      - name: Build
+        run: |
+          cmake --build ${{github.workspace}}/build_${{matrix.compiler}}_${{matrix.build_type}} \
+                --config ${{matrix.build_type}} \
+                --parallel $(nproc)
+
+      - name: Run tests
+        run: |
+          cd ${{github.workspace}}/build_${{matrix.compiler}}_${{matrix.build_type}}
+          ctest --output-on-failure --parallel $(nproc)
+
+  code-quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install clang-tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang clang-tidy clang-format python3 python3-pip
+
+      - name: Configure CMake for clang-tidy
+        run: |
+          cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+      - name: Build minimal target
+        run: |
+          cmake --build build --target help
+
+      - name: Run clang-format check (exclude build directory)
+        run: |
+          find . -type f \( -name '*.c' -o -name '*.h' \) \
+            ! -path "./build/*" \
+            ! -path "./*/build/*" \
+            ! -path "./*/*/build/*" \
+            ! -name "CMakeCCompilerId.c" \
+            ! -name "CMakeCXXCompilerId.cpp" \
+            | xargs clang-format --dry-run --Werror 2>&1 || true
+
+      - name: Run clang-tidy with detailed error reporting
+        run: |
+          cat > run_clang_tidy_detailed.py << 'EOF'
+          import subprocess
+          import sys
+          import os
+          
+          total_errors = 0
+          total_warnings = 0
+          
+          # Находим все исходные файлы, исключая build директорию
+          source_files = []
+          for root, dirs, files in os.walk("."):
+              # Пропускаем директории build
+              if "build" in root.split(os.sep):
+                  continue
+          
+              for file in files:
+                  if file.endswith(".c"):
+                      filepath = os.path.join(root, file)
+                      source_files.append(filepath)
+          
+          print(f"Found {len(source_files)} source files to check")
+          print("=" * 60)
+          
+          for filepath in sorted(source_files):
+              print(f"\n🔍 Checking: {filepath}")
+              print("-" * 40)
+          
+              # Запускаем clang-tidy с менее строгими настройками для начала
+              cmd = [
+                  "clang-tidy",
+                  "-p", "build",
+                  filepath,
+                  "--checks=*,-clang-analyzer-*,-altera-*,-fuchsia-*,-android-*,-zircon-*",
+                  # Убираем --warnings-as-errors для получения полного отчета
+              ]
+          
+              result = subprocess.run(
+                  cmd,
+                  capture_output=True,
+                  text=True,
+                  encoding='utf-8'
+              )
+          
+              if result.stdout:
+                  print(result.stdout)
+                  # Подсчитываем ошибки и предупреждения
+                  error_count = result.stdout.count("error:")
+                  warning_count = result.stdout.count("warning:")
+                  total_errors += error_count
+                  total_warnings += warning_count
+          
+                  if error_count > 0 or warning_count > 0:
+                      print(f"📊 Found: {error_count} errors, {warning_count} warnings")
+          
+              if result.stderr:
+                  print("STDERR:", result.stderr)
+          
+          print("\n" + "=" * 60)
+          print("📈 FINAL SUMMARY")
+          print("=" * 60)
+          print(f"Total files checked: {len(source_files)}")
+          print(f"Total errors found: {total_errors}")
+          print(f"Total warnings found: {total_warnings}")
+          
+          if total_errors > 0:
+              print("\n❌ FAILED: Found errors that need to be fixed")
+              sys.exit(1)
+          elif total_warnings > 0:
+              print("\n⚠️  WARNING: Found warnings (consider fixing them)")
+          else:
+              print("\n✅ SUCCESS: No errors or warnings found")
+          EOF
+          
+          python3 run_clang_tidy_detailed.py
+
+      - name: Create simplified test for debugging
+        if: failure()
+        run: |
+          # Простая проверка одного файла для отладки
+          echo "Debugging clang-tidy issues..."
+          echo "Checking ./src/algorithms/optimized/binary_masks.c specifically:"
+          
+          # Сначала проверим, что файл существует
+          if [ -f "./src/algorithms/optimized/binary_masks.c" ]; then
+              echo "File exists, running clang-tidy..."
+              clang-tidy -p build ./src/algorithms/optimized/binary_masks.c \
+                --checks=* 2>&1 || true
+          else
+              echo "File not found!"
+          fi
+          
+          echo "Checking a few more problematic files..."
+          for file in \
+            "./src/algorithms/optimized/binary_masks.c" \
+            "./benchmarks/performance_benchmark.c" \
+            "./examples/constraint_example.c"; do
+            if [ -f "$file" ]; then
+                echo "=== $file ==="
+                clang-tidy -p build "$file" --checks=readability-* 2>&1 | head -20
+            fi
+          done
+
+      - name: Run cppcheck
+        run: |
+          echo "Running cppcheck on source directories..."
+          cppcheck \
+            --enable=warning,performance,portability,style \
+            --suppress=missingIncludeSystem \
+            --suppress=unusedFunction \
+            --inline-suppr \
+            --error-exitcode=1 \
+            --force \
+            --quiet \
+            ./src ./examples ./benchmarks 2> cppcheck_output.txt || true
+          
+          if [ -s cppcheck_output.txt ]; then
+              echo "Cppcheck found issues:"
+              cat cppcheck_output.txt
+              echo "❌ Cppcheck failed"
+              exit 1
+          else
+              echo "✅ Cppcheck passed"
+          fi

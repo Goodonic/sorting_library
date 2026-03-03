@@ -1,0 +1,4 @@
+#ifndef SORTING_TYPES_H
+#define SORTING_TYPES_H
+
+#endif //SORTING_TYPES_H
