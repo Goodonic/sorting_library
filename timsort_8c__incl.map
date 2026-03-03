@@ -1,0 +1,11 @@
+<map id="src/algorithms/efficient/timsort.c" name="src/algorithms/efficient/timsort.c">
+<area shape="rect" id="Node000001" title=" " alt="" coords="46,5,218,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,101,72,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,48,63,93,60,89,109,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,101,167,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="135,46,135,87,129,87,129,46"/>
+<area shape="rect" id="Node000004" href="$efficient__sorts_8h.html" title="Общий заголовочный файл проекта &quot;efficient_sorts&quot;." alt="" coords="192,93,355,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="164,43,232,84,229,89,162,48"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="236,181,311,207"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="276,134,276,167,271,167,271,134"/>
+</map>

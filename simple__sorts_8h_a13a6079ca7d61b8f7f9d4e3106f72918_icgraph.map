@@ -1,0 +1,12 @@
+<map id="swap_bytes" name="swap_bytes">
+<area shape="rect" id="Node000001" title=" " alt="" coords="167,80,265,105"/>
+<area shape="rect" id="Node000002" href="$bubble_8c.html#a6934c940aaa57f08febf595e659a2b6a" title=" " alt="" coords="13,5,111,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,76,118,44,93,33,95,28,120,40,181,71"/>
+<area shape="rect" id="Node000003" href="$gnome__stooge_8c.html#a5c595044d19a1ad106fc75f7462b2993" title=" " alt="" coords="13,55,111,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,85,111,78,112,73,153,80"/>
+<area shape="rect" id="Node000004" href="$selection_8c.html#a427978cbcbfbae8f989bb89b50616c47" title=" " alt="" coords="5,104,119,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="153,105,119,110,119,105,153,100"/>
+<area shape="rect" id="Node000005" href="$gnome__stooge_8c.html#a0a0b3550eb46253844372846e7e75757" title=" " alt="" coords="13,177,111,203"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="185,115,85,180,82,175,182,111"/>
+<area shape="poly" id="edge5_Node000005_Node000005" title=" " alt="" coords="88,167,81,159,62,156,46,158,38,163,36,168,41,176,36,179,31,169,34,159,44,153,62,151,83,154,92,163"/>
+</map>
